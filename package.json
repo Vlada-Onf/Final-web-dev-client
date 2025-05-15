@@ -1,0 +1,33 @@
+{
+  "name": "docs-ui",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "nuxt start",
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "-": "^0.0.1",
+    "@nuxt/ui": "^3.1.1",
+    "@nuxtjs/google-fonts": "^3.2.0",
+    "@nuxtjs/tailwindcss": "^6.14.0",
+    "@pinia/nuxt": "0.11.0",
+    "@tailwindcss/postcss": "^4.1.6",
+    "@tailwindcss/vite": "^4.1.6",
+    "@vueuse/nuxt": "^13.1.0",
+    "autoprefixer": "^10.4.21",
+    "floating-vue": "^5.2.2",
+    "nuxt": "^3.17.3",
+    "nuxt-vue3-google-signin": "^0.0.11",
+    "pinia": "^3.0.2",
+    "pinia-plugin-persistedstate": "^4.3.0",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^4.1.6",
+    "vue": "latest",
+    "zod": "^3.24.4"
+  }
+}

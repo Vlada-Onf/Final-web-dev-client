@@ -1,0 +1,55 @@
+# Docker
+# Build and push an image to Azure Container Registry
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
+trigger:
+  - main
+  - develop
+
+resources:
+  - repo: self
+
+variables:
+  # Container registry service connection established during pipeline creation
+  dockerRegistryServiceConnection: 'crumsystem'
+  imageRepository: 'documentsui'
+  containerRegistry: 'crumsystem.azurecr.io'
+  dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
+  tag: '$(Build.BuildId)'
+  imageName: crumsystem.azurecr.io/documentsui:$(build.buildId)
+
+  # Agent VM image name
+  vmImageName: 'ubuntu-latest'
+
+stages:
+  - stage: Build
+    displayName: Build and push stage
+    jobs:
+      - job: Build
+        displayName: Build
+        pool:
+          vmImage: $(vmImageName)
+        steps:
+          - task: Docker@2
+            displayName: Build and push an image to container registry
+            inputs:
+              command: buildAndPush
+              repository: $(imageRepository)
+              dockerfile: $(dockerfilePath)
+              containerRegistry: $(dockerRegistryServiceConnection)
+              tags: |
+                $(tag)
+          - task: AzureWebAppContainer@1
+            displayName: Push to azure app service for containers to main
+            inputs:
+              azureSubscription: 'UMSystemServiceConnection'
+              appName: 'documents-ui'
+              containers: '$(imageName)'
+            condition: eq(variables['Build.SourceBranchName'], 'main')
+          - task: AzureWebAppContainer@1
+            displayName: Push to azure app service for containers to dev
+            inputs:
+              azureSubscription: 'UMSystemServiceConnection'
+              appName: 'documents-ui-dev'
+              containers: '$(imageName)'
+            condition: eq(variables['Build.SourceBranchName'], 'develop')  
